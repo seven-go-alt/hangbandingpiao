@@ -13,6 +13,11 @@ export async function getOrderList(params: { page?: number; limit?: number } = {
   return unwrapResponse(res)
 }
 
+export async function getOrderDetail(id: number | string) {
+  const res = await request.get<ApiResponse<OrderItem>>(`/feijiOrder/detail/${id}`)
+  return unwrapResponse(res)
+}
+
 export async function createOrder(payload: CreateOrderPayload) {
   const res = await request.post<ApiResponse>('/feijiOrder/add', payload)
   return unwrapResponse(res)

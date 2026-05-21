@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, reactive, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { createMessage, getMessageList, type MessageItem } from '@/api/message'
 import { useAuthStore } from '@/stores/auth'
 import { formatDateTime } from '@/utils/format'
+import { useRoute } from 'vue-router'
 
+const route = useRoute()
 const authStore = useAuthStore()
 const loading = ref(false)
 const submitting = ref(false)
@@ -17,8 +19,10 @@ const form = reactive({
 async function loadMessages() {
   loading.value = true
   try {
-    const res = await getMessageList({ page: 1, limit: 20 })
+    const feijiId = route.query.feijiId ? Number(route.query.feijiId) : undefined
+    const res = await getMessageList({ page: 1, limit: 20, feijiId })
     list.value = res.data?.list || []
+    if (feijiId) form.feijiId = feijiId
   } catch (error) {
     ElMessage.error(error instanceof Error ? error.message : '加载留言失败')
   } finally {
@@ -47,6 +51,10 @@ async function submitMessage() {
     submitting.value = false
   }
 }
+
+watch(() => route.query.feijiId, () => {
+  loadMessages().catch(() => undefined)
+})
 
 onMounted(loadMessages)
 </script>

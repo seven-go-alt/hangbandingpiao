@@ -4,7 +4,9 @@ import { ElMessage } from 'element-plus'
 import { getOrderList, refundOrder } from '@/api/order'
 import type { OrderItem } from '@/types/api'
 import { formatDateTime, formatPrice } from '@/utils/format'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const loading = ref(false)
 const orders = ref<OrderItem[]>([])
 
@@ -30,6 +32,10 @@ async function handleRefund(id: number) {
   }
 }
 
+function gotoDetail(id: number) {
+  router.push(`/orders/${id}`)
+}
+
 onMounted(loadOrders)
 </script>
 
@@ -51,7 +57,10 @@ onMounted(loadOrders)
         <div class="order-side">
           <strong>{{ formatPrice(item.feijiNewMoney) }}</strong>
           <span>{{ item.feijiOrderValue || item.feijiOrderTypes || '状态未知' }}</span>
-          <button class="ghost-btn" @click="handleRefund(item.id)">申请退款</button>
+          <div class="hero-actions order-actions">
+            <button class="ghost-btn" @click="gotoDetail(item.id)">查看详情</button>
+            <button class="ghost-btn" @click="handleRefund(item.id)">申请退款</button>
+          </div>
         </div>
       </article>
     </div>

@@ -3,7 +3,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { getFlightDetail } from '@/api/flight'
-import { createCollection } from '@/api/collection'
+import { createCollection, hasCollected } from '@/api/collection'
 import { formatPrice, pickFirstImage } from '@/utils/format'
 import type { FlightItem } from '@/types/api'
 import { useAuthStore } from '@/stores/auth'
@@ -13,14 +13,19 @@ const router = useRouter()
 const authStore = useAuthStore()
 const flight = ref<FlightItem | null>(null)
 const loading = ref(false)
+const collected = ref(false)
 
 const cover = computed(() => pickFirstImage(flight.value?.feijiPhoto))
 
 async function loadDetail() {
   loading.value = true
   try {
-    const res = await getFlightDetail(Number(route.params.id))
+    const id = Number(route.params.id)
+    const res = await getFlightDetail(id)
     flight.value = res.data || null
+    if (authStore.isLoggedIn && flight.value) {
+      collected.value = await hasCollected(flight.value.id)
+    }
   } catch (error) {
     ElMessage.error(error instanceof Error ? error.message : '加载详情失败')
   } finally {
@@ -43,8 +48,13 @@ async function collectFlight() {
     router.push({ name: 'login', query: { redirect: `/flights/${flight.value.id}` } })
     return
   }
+  if (collected.value) {
+    ElMessage.info('你已经收藏过这个航班了')
+    return
+  }
   try {
     await createCollection({ feijiId: flight.value.id, yonghuId: authStore.userId })
+    collected.value = true
     ElMessage.success('收藏成功')
   } catch (error) {
     ElMessage.error(error instanceof Error ? error.message : '收藏失败')
@@ -52,7 +62,8 @@ async function collectFlight() {
 }
 
 function gotoMessages() {
-  router.push('/messages')
+  if (!flight.value) return
+  router.push({ path: '/messages', query: { feijiId: String(flight.value.id) } })
 }
 
 onMounted(loadDetail)
@@ -73,7 +84,7 @@ onMounted(loadDetail)
         <p class="price">{{ formatPrice(flight.feijiNewMoney) }}</p>
         <div class="hero-actions">
           <button class="primary-btn" @click="createOrder">立即预订</button>
-          <button class="ghost-btn" @click="collectFlight">加入收藏</button>
+          <button class="ghost-btn" @click="collectFlight">{{ collected ? '已收藏' : '加入收藏' }}</button>
           <button class="ghost-btn" @click="gotoMessages">留言互动</button>
         </div>
         <div class="rich-text" v-html="flight.feijiContent || '<p>暂无详情</p>'" />

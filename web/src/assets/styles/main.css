@@ -438,6 +438,10 @@ a {
   justify-items: end;
 }
 
+.order-actions {
+  justify-content: flex-end;
+}
+
 .detail-card {
   display: grid;
   gap: 24px;

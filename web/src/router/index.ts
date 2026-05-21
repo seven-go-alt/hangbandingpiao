@@ -10,6 +10,7 @@ const FlightDetailView = () => import('@/views/flight/FlightDetailView.vue')
 const NewsListView = () => import('@/views/news/NewsListView.vue')
 const NewsDetailView = () => import('@/views/news/NewsDetailView.vue')
 const OrderListView = () => import('@/views/order/OrderListView.vue')
+const OrderDetailView = () => import('@/views/order/OrderDetailView.vue')
 const OrderCreateView = () => import('@/views/order/OrderCreateView.vue')
 const ProfileView = () => import('@/views/profile/ProfileView.vue')
 const RechargeView = () => import('@/views/profile/RechargeView.vue')
@@ -29,6 +30,7 @@ const router = createRouter({
         { path: 'news', name: 'news', component: NewsListView },
         { path: 'news/:id', name: 'news-detail', component: NewsDetailView, props: true },
         { path: 'orders', name: 'orders', component: OrderListView, meta: { requiresAuth: true } },
+        { path: 'orders/:id', name: 'order-detail', component: OrderDetailView, props: true, meta: { requiresAuth: true } },
         { path: 'collections', name: 'collections', component: CollectionListView, meta: { requiresAuth: true } },
         { path: 'messages', name: 'messages', component: MessageListView, meta: { requiresAuth: true } },
         { path: 'orders/create/:flightId', name: 'order-create', component: OrderCreateView, props: true, meta: { requiresAuth: true } },
