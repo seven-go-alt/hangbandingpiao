@@ -2,7 +2,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { createOrder } from '@/api/order'
+import { createOrder, getOrderList } from '@/api/order'
 import { getFlightDetail } from '@/api/flight'
 import { useAuthStore } from '@/stores/auth'
 import { formatPrice } from '@/utils/format'
@@ -29,6 +29,16 @@ async function syncProfile() {
   await authStore.fetchSession()
 }
 
+async function gotoNewestOrderDetail() {
+  const res = await getOrderList({ page: 1, limit: 1 })
+  const latest = res.data?.list?.[0]
+  if (latest?.id) {
+    router.push(`/orders/${latest.id}`)
+    return
+  }
+  router.push('/orders')
+}
+
 async function submitOrder() {
   if (!flight.value) return
   if (!balanceEnough.value) {
@@ -45,7 +55,7 @@ async function submitOrder() {
     })
     await syncProfile()
     ElMessage.success('预订成功')
-    router.push('/orders')
+    await gotoNewestOrderDetail()
   } catch (error) {
     ElMessage.error(error instanceof Error ? error.message : '预订失败')
   } finally {

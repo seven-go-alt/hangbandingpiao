@@ -269,6 +269,24 @@ a {
   background: linear-gradient(135deg, #dbeafe, #ede9fe);
 }
 
+.balance-banner,
+.inline-alert {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(239, 246, 255, 0.95);
+  border: 1px solid #bfdbfe;
+}
+
+.balance-banner.is-warn,
+.inline-alert {
+  background: #fff7ed;
+  border-color: #fdba74;
+}
+
 .section-block,
 .auth-card,
 .detail-card {
