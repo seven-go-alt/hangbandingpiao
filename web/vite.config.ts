@@ -12,4 +12,24 @@ export default defineConfig({
   server: {
     port: 5173,
   },
+  build: {
+    chunkSizeWarningLimit: 700,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('vue') || id.includes('pinia') || id.includes('vue-router')) {
+              return 'vue-vendor'
+            }
+            if (id.includes('element-plus') || id.includes('@element-plus')) {
+              return 'ui-vendor'
+            }
+            if (id.includes('axios')) {
+              return 'http-vendor'
+            }
+          }
+        },
+      },
+    },
+  },
 })

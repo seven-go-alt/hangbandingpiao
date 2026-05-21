@@ -1,19 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '@/views/home/HomeView.vue'
-import LoginView from '@/views/auth/LoginView.vue'
-import RegisterView from '@/views/auth/RegisterView.vue'
-import FlightListView from '@/views/flight/FlightListView.vue'
-import FlightDetailView from '@/views/flight/FlightDetailView.vue'
-import NewsListView from '@/views/news/NewsListView.vue'
-import NewsDetailView from '@/views/news/NewsDetailView.vue'
-import OrderListView from '@/views/order/OrderListView.vue'
-import OrderCreateView from '@/views/order/OrderCreateView.vue'
-import ProfileView from '@/views/profile/ProfileView.vue'
-import RechargeView from '@/views/profile/RechargeView.vue'
-import CollectionListView from '@/views/collection/CollectionListView.vue'
-import MessageListView from '@/views/message/MessageListView.vue'
 import FrontLayout from '@/layouts/FrontLayout.vue'
 import { getStorage, TOKEN_KEY } from '@/utils/storage'
+
+const HomeView = () => import('@/views/home/HomeView.vue')
+const LoginView = () => import('@/views/auth/LoginView.vue')
+const RegisterView = () => import('@/views/auth/RegisterView.vue')
+const FlightListView = () => import('@/views/flight/FlightListView.vue')
+const FlightDetailView = () => import('@/views/flight/FlightDetailView.vue')
+const NewsListView = () => import('@/views/news/NewsListView.vue')
+const NewsDetailView = () => import('@/views/news/NewsDetailView.vue')
+const OrderListView = () => import('@/views/order/OrderListView.vue')
+const OrderCreateView = () => import('@/views/order/OrderCreateView.vue')
+const ProfileView = () => import('@/views/profile/ProfileView.vue')
+const RechargeView = () => import('@/views/profile/RechargeView.vue')
+const CollectionListView = () => import('@/views/collection/CollectionListView.vue')
+const MessageListView = () => import('@/views/message/MessageListView.vue')
 
 const router = createRouter({
   history: createWebHistory(),
