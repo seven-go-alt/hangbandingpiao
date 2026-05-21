@@ -5,8 +5,10 @@ import { getOrderList, refundOrder } from '@/api/order'
 import type { OrderItem } from '@/types/api'
 import { formatDateTime, formatPrice } from '@/utils/format'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 
 const router = useRouter()
+const authStore = useAuthStore()
 const loading = ref(false)
 const orders = ref<OrderItem[]>([])
 
@@ -41,7 +43,8 @@ function getOrderStatusClass(order: OrderItem) {
 async function handleRefund(id: number) {
   try {
     await refundOrder(id)
-    ElMessage.success('退款成功')
+    await authStore.fetchSession()
+    ElMessage.success('退款成功，余额已更新')
     await loadOrders()
   } catch (error) {
     ElMessage.error(error instanceof Error ? error.message : '退款失败')
@@ -58,7 +61,10 @@ onMounted(loadOrders)
 <template>
   <section class="section-block">
     <div class="section-head">
-      <h1>我的订单</h1>
+      <div>
+        <h1>我的订单</h1>
+        <p class="muted">当前余额：{{ formatPrice(authStore.profile?.newMoney) }}</p>
+      </div>
     </div>
     <div v-if="loading" class="empty-state">加载中...</div>
     <div v-else-if="!orders.length" class="empty-state">暂无订单</div>
