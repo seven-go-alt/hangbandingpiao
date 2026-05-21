@@ -127,6 +127,14 @@ a {
   padding: 0;
 }
 
+.inline-filter-tip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #475569;
+}
+
 .page-main {
   width: min(1200px, calc(100% - 32px));
   margin: 0 auto;
@@ -440,6 +448,32 @@ a {
 
 .order-actions {
   justify-content: flex-end;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 88px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.status-badge.is-success {
+  color: #166534;
+  background: #dcfce7;
+}
+
+.status-badge.is-pending {
+  color: #92400e;
+  background: #fef3c7;
+}
+
+.status-badge.is-refunded {
+  color: #475569;
+  background: #e2e8f0;
 }
 
 .detail-card {

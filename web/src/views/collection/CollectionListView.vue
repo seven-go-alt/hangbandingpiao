@@ -3,7 +3,9 @@ import { onMounted, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { deleteCollection, getCollectionList, type CollectionItem } from '@/api/collection'
 import { formatDateTime, formatPrice, pickFirstImage } from '@/utils/format'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const loading = ref(false)
 const list = ref<CollectionItem[]>([])
 
@@ -29,6 +31,10 @@ async function removeItem(id: number) {
   }
 }
 
+function gotoFlightDetail(feijiId: number) {
+  router.push(`/flights/${feijiId}`)
+}
+
 onMounted(loadCollections)
 </script>
 
@@ -51,7 +57,10 @@ onMounted(loadCollections)
         </div>
         <div class="order-side">
           <strong>{{ formatPrice(item.feijiNewMoney) }}</strong>
-          <button class="ghost-btn" @click="removeItem(item.id)">取消收藏</button>
+          <div class="hero-actions order-actions">
+            <button class="ghost-btn" @click="gotoFlightDetail(item.feijiId)">查看航班</button>
+            <button class="ghost-btn" @click="removeItem(item.id)">取消收藏</button>
+          </div>
         </div>
       </article>
     </div>

@@ -22,6 +22,22 @@ async function loadOrders() {
   }
 }
 
+function getOrderStatus(order: OrderItem) {
+  return order.feijiOrderValue || String(order.feijiOrderTypes || '状态未知')
+}
+
+function canRefund(order: OrderItem) {
+  const status = String(order.feijiOrderValue || order.feijiOrderTypes || '')
+  return !/已退款|退款/.test(status)
+}
+
+function getOrderStatusClass(order: OrderItem) {
+  const status = String(order.feijiOrderValue || order.feijiOrderTypes || '')
+  if (/已退款|退款/.test(status)) return 'status-badge is-refunded'
+  if (/已支付|已预订|成功|完成/.test(status)) return 'status-badge is-success'
+  return 'status-badge is-pending'
+}
+
 async function handleRefund(id: number) {
   try {
     await refundOrder(id)
@@ -56,10 +72,12 @@ onMounted(loadOrders)
         </div>
         <div class="order-side">
           <strong>{{ formatPrice(item.feijiNewMoney) }}</strong>
-          <span>{{ item.feijiOrderValue || item.feijiOrderTypes || '状态未知' }}</span>
+          <span :class="getOrderStatusClass(item)">{{ getOrderStatus(item) }}</span>
           <div class="hero-actions order-actions">
             <button class="ghost-btn" @click="gotoDetail(item.id)">查看详情</button>
-            <button class="ghost-btn" @click="handleRefund(item.id)">申请退款</button>
+            <button class="ghost-btn" :disabled="!canRefund(item)" @click="handleRefund(item.id)">
+              {{ canRefund(item) ? '申请退款' : '已退款' }}
+            </button>
           </div>
         </div>
       </article>
