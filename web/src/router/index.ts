@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import FrontLayout from '@/layouts/FrontLayout.vue'
+import AdminLayout from '@/layouts/AdminLayout.vue'
 import { getStorage, TOKEN_KEY } from '@/utils/storage'
 
 const HomeView = () => import('@/views/home/HomeView.vue')
@@ -16,6 +17,10 @@ const ProfileView = () => import('@/views/profile/ProfileView.vue')
 const RechargeView = () => import('@/views/profile/RechargeView.vue')
 const CollectionListView = () => import('@/views/collection/CollectionListView.vue')
 const MessageListView = () => import('@/views/message/MessageListView.vue')
+const AdminDashboardView = () => import('@/views/admin/AdminDashboardView.vue')
+const AdminUserListView = () => import('@/views/admin/AdminUserListView.vue')
+const AdminFlightListView = () => import('@/views/admin/AdminFlightListView.vue')
+const AdminOrderListView = () => import('@/views/admin/AdminOrderListView.vue')
 
 const router = createRouter({
   history: createWebHistory(),
@@ -36,6 +41,16 @@ const router = createRouter({
         { path: 'orders/create/:flightId', name: 'order-create', component: OrderCreateView, props: true, meta: { requiresAuth: true } },
         { path: 'profile', name: 'profile', component: ProfileView, meta: { requiresAuth: true } },
         { path: 'recharge', name: 'recharge', component: RechargeView, meta: { requiresAuth: true } },
+      ],
+    },
+    {
+      path: '/admin',
+      component: AdminLayout,
+      children: [
+        { path: '', name: 'admin-dashboard', component: AdminDashboardView },
+        { path: 'users', name: 'admin-users', component: AdminUserListView },
+        { path: 'flights', name: 'admin-flights', component: AdminFlightListView },
+        { path: 'orders', name: 'admin-orders', component: AdminOrderListView },
       ],
     },
     { path: '/login', name: 'login', component: LoginView },

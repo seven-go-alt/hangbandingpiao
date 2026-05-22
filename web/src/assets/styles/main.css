@@ -43,6 +43,86 @@ a {
   min-height: 100vh;
 }
 
+.admin-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+}
+
+.admin-sidebar {
+  padding: 24px 18px;
+  background: #0f172a;
+  color: #e2e8f0;
+  display: grid;
+  align-content: start;
+  gap: 18px;
+}
+
+.admin-brand {
+  font-size: 22px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.admin-nav {
+  display: grid;
+  gap: 10px;
+}
+
+.admin-nav-link {
+  text-align: left;
+  padding: 12px 14px;
+  border: 0;
+  border-radius: 14px;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+
+.admin-nav-link.active,
+.admin-nav-link:hover {
+  background: rgba(148, 163, 184, 0.16);
+}
+
+.admin-main {
+  padding: 28px;
+}
+
+.admin-header {
+  margin-bottom: 20px;
+}
+
+.admin-back-btn {
+  color: #e2e8f0;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+}
+
+.table-card {
+  overflow: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  background: #fff;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+}
+
+.data-table th,
+.data-table td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.data-table th {
+  color: #475569;
+  font-size: 14px;
+  background: #f8fafc;
+}
+
 .topbar {
   position: sticky;
   top: 0;
