@@ -34,6 +34,21 @@
 | 前端 | JSP + LayUI + ElementUI + Vue.js |
 | 富文本 | TinyMCE / UEditor |
 
+## 🚀 Vue 3 前端重构
+
+仓库内新增独立 Vue 3 前端子项目：
+
+```bash
+web/
+```
+
+详见：
+
+- `web/README.md`：Vue 前端启动、构建与范围说明
+- `MERGE_REQUEST.md`：本轮重构 MR 合并说明、测试清单和风险边界
+
+当前 Vue 前端已覆盖用户端 MVP 与后台管理端只读 MVP，后端仍保留原 Spring MVC 接口。
+
 ## 🚀 快速开始
 
 ### 环境要求

@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { createMessage, getMessageList, type MessageItem } from '@/api/message'
 import { useAuthStore } from '@/stores/auth'
 import { formatDateTime } from '@/utils/format'
+import { useRoute, useRouter } from 'vue-router'
 
+const route = useRoute()
+const router = useRouter()
 const authStore = useAuthStore()
 const loading = ref(false)
 const submitting = ref(false)
@@ -14,11 +17,18 @@ const form = reactive({
   feijiLiuyanContent: '',
 })
 
+const activeFlightId = computed(() => {
+  const value = route.query.feijiId
+  return value ? Number(value) : 0
+})
+
 async function loadMessages() {
   loading.value = true
   try {
-    const res = await getMessageList({ page: 1, limit: 20 })
+    const feijiId = activeFlightId.value || undefined
+    const res = await getMessageList({ page: 1, limit: 20, feijiId })
     list.value = res.data?.list || []
+    if (feijiId) form.feijiId = feijiId
   } catch (error) {
     ElMessage.error(error instanceof Error ? error.message : '加载留言失败')
   } finally {
@@ -48,6 +58,14 @@ async function submitMessage() {
   }
 }
 
+function clearFlightFilter() {
+  router.push({ path: '/messages' })
+}
+
+watch(() => route.query.feijiId, () => {
+  loadMessages().catch(() => undefined)
+})
+
 onMounted(loadMessages)
 </script>
 
@@ -55,6 +73,10 @@ onMounted(loadMessages)
   <section class="section-block">
     <div class="section-head">
       <h1>我的留言</h1>
+      <div v-if="activeFlightId" class="inline-filter-tip">
+        <span>当前查看：航班 #{{ activeFlightId }} 的留言</span>
+        <button class="text-btn" @click="clearFlightFilter">查看全部</button>
+      </div>
     </div>
 
     <div class="form-grid single message-form">

@@ -29,3 +29,8 @@ export async function deleteCollection(ids: number[]) {
   const res = await request.post<ApiResponse>('/feijiCollection/delete', ids)
   return unwrapResponse(res)
 }
+
+export async function hasCollected(feijiId: number) {
+  const res = await getCollectionList({ page: 1, limit: 100 })
+  return (res.data?.list || []).some((item) => item.feijiId === feijiId)
+}

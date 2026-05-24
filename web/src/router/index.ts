@@ -1,19 +1,26 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '@/views/home/HomeView.vue'
-import LoginView from '@/views/auth/LoginView.vue'
-import RegisterView from '@/views/auth/RegisterView.vue'
-import FlightListView from '@/views/flight/FlightListView.vue'
-import FlightDetailView from '@/views/flight/FlightDetailView.vue'
-import NewsListView from '@/views/news/NewsListView.vue'
-import NewsDetailView from '@/views/news/NewsDetailView.vue'
-import OrderListView from '@/views/order/OrderListView.vue'
-import OrderCreateView from '@/views/order/OrderCreateView.vue'
-import ProfileView from '@/views/profile/ProfileView.vue'
-import RechargeView from '@/views/profile/RechargeView.vue'
-import CollectionListView from '@/views/collection/CollectionListView.vue'
-import MessageListView from '@/views/message/MessageListView.vue'
 import FrontLayout from '@/layouts/FrontLayout.vue'
+import AdminLayout from '@/layouts/AdminLayout.vue'
 import { getStorage, TOKEN_KEY } from '@/utils/storage'
+
+const HomeView = () => import('@/views/home/HomeView.vue')
+const LoginView = () => import('@/views/auth/LoginView.vue')
+const RegisterView = () => import('@/views/auth/RegisterView.vue')
+const FlightListView = () => import('@/views/flight/FlightListView.vue')
+const FlightDetailView = () => import('@/views/flight/FlightDetailView.vue')
+const NewsListView = () => import('@/views/news/NewsListView.vue')
+const NewsDetailView = () => import('@/views/news/NewsDetailView.vue')
+const OrderListView = () => import('@/views/order/OrderListView.vue')
+const OrderDetailView = () => import('@/views/order/OrderDetailView.vue')
+const OrderCreateView = () => import('@/views/order/OrderCreateView.vue')
+const ProfileView = () => import('@/views/profile/ProfileView.vue')
+const RechargeView = () => import('@/views/profile/RechargeView.vue')
+const CollectionListView = () => import('@/views/collection/CollectionListView.vue')
+const MessageListView = () => import('@/views/message/MessageListView.vue')
+const AdminDashboardView = () => import('@/views/admin/AdminDashboardView.vue')
+const AdminUserListView = () => import('@/views/admin/AdminUserListView.vue')
+const AdminFlightListView = () => import('@/views/admin/AdminFlightListView.vue')
+const AdminOrderListView = () => import('@/views/admin/AdminOrderListView.vue')
 
 const router = createRouter({
   history: createWebHistory(),
@@ -28,11 +35,22 @@ const router = createRouter({
         { path: 'news', name: 'news', component: NewsListView },
         { path: 'news/:id', name: 'news-detail', component: NewsDetailView, props: true },
         { path: 'orders', name: 'orders', component: OrderListView, meta: { requiresAuth: true } },
+        { path: 'orders/:id', name: 'order-detail', component: OrderDetailView, props: true, meta: { requiresAuth: true } },
         { path: 'collections', name: 'collections', component: CollectionListView, meta: { requiresAuth: true } },
         { path: 'messages', name: 'messages', component: MessageListView, meta: { requiresAuth: true } },
         { path: 'orders/create/:flightId', name: 'order-create', component: OrderCreateView, props: true, meta: { requiresAuth: true } },
         { path: 'profile', name: 'profile', component: ProfileView, meta: { requiresAuth: true } },
         { path: 'recharge', name: 'recharge', component: RechargeView, meta: { requiresAuth: true } },
+      ],
+    },
+    {
+      path: '/admin',
+      component: AdminLayout,
+      children: [
+        { path: '', name: 'admin-dashboard', component: AdminDashboardView, meta: { requiresAuth: true } },
+        { path: 'users', name: 'admin-users', component: AdminUserListView, meta: { requiresAuth: true } },
+        { path: 'flights', name: 'admin-flights', component: AdminFlightListView, meta: { requiresAuth: true } },
+        { path: 'orders', name: 'admin-orders', component: AdminOrderListView, meta: { requiresAuth: true } },
       ],
     },
     { path: '/login', name: 'login', component: LoginView },
