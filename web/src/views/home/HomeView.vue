@@ -1,16 +1,22 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useAppStore } from '@/stores/app'
 import { getFlightList } from '@/api/flight'
 import { getNewsList } from '@/api/news'
 import { formatPrice, pickFirstImage } from '@/utils/format'
 import type { FlightItem, NewsItem } from '@/types/api'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 
 const appStore = useAppStore()
+const authStore = useAuthStore()
 const router = useRouter()
 const flights = ref<FlightItem[]>([])
 const newsList = ref<NewsItem[]>([])
+
+const isLoggedIn = computed(() => authStore.isLoggedIn)
+const balanceText = computed(() => formatPrice(authStore.profile?.newMoney))
+const balanceLow = computed(() => Number(authStore.profile?.newMoney || 0) > 0 && Number(authStore.profile?.newMoney || 0) < 500)
 
 async function loadData() {
   const [flightRes, newsRes] = await Promise.all([
@@ -22,7 +28,11 @@ async function loadData() {
 }
 
 onMounted(async () => {
-  await Promise.all([appStore.fetchBanners(), loadData()])
+  await Promise.all([
+    appStore.fetchBanners(),
+    loadData(),
+    authStore.isLoggedIn ? authStore.fetchSession() : Promise.resolve(null),
+  ])
 })
 </script>
 
@@ -34,6 +44,16 @@ onMounted(async () => {
       <p class="hero-text">
         这是一版基于现有 Java 接口重构的 Vue 前端。先聚焦用户端主流程，把老旧 JSP 页面替换成更一致、清爽、可继续扩展的现代界面。
       </p>
+      <div v-if="isLoggedIn" class="balance-banner" :class="{ 'is-warn': balanceLow }">
+        <div>
+          <strong>当前余额：{{ balanceText }}</strong>
+          <p class="muted">你可以直接查看订单、个人资料，或继续预订航班。</p>
+        </div>
+        <div class="hero-actions">
+          <button class="ghost-btn" @click="router.push('/orders')">我的订单</button>
+          <button class="ghost-btn" @click="router.push('/profile')">个人中心</button>
+        </div>
+      </div>
       <div class="hero-actions">
         <button class="primary-btn" @click="router.push('/flights')">立即查看航班</button>
         <button class="ghost-btn hero-secondary" @click="router.push('/news')">浏览新闻公告</button>

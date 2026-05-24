@@ -29,6 +29,10 @@ export interface UserInfo {
   yonghuPhoto?: string
 }
 
+export interface AdminUserItem extends UserInfo {
+  createTime?: string
+}
+
 export interface FlightItem {
   id: number
   feijiName: string
@@ -68,4 +72,8 @@ export interface OrderItem {
   feijiEndAddress?: string
   feijiStartTime?: string
   feijiNewMoney?: number
+  yonghuName?: string
+  yonghuPhone?: string
+  yonghuIdNumber?: string
+  newMoney?: number
 }
