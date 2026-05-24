@@ -192,6 +192,15 @@ button:disabled {
   border: 1px solid #e2e8f0;
 }
 
+.avatar-large {
+  width: 112px;
+  height: 112px;
+  object-fit: cover;
+  border-radius: 28px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
+}
+
 .info-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
