@@ -8,9 +8,16 @@ export interface AdminOrderQuery {
   feijiName?: string
   yonghuName?: string
   yonghuPhone?: string
+  feijiOrderUuidNumber?: string
+  feijiOrderTypes?: string | number
 }
 
 export async function getAdminOrderList(params: AdminOrderQuery = {}) {
   const res = await request.get<ApiResponse<PageResult<OrderItem>>>('/feijiOrder/page', { params })
+  return unwrapResponse(res)
+}
+
+export async function getAdminOrderDetail(id: number | string) {
+  const res = await request.get<ApiResponse<OrderItem>>(`/feijiOrder/detail/${id}`)
   return unwrapResponse(res)
 }
